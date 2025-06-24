@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>seka.id - Pemendek Tautan</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #f9fafb;
+    margin: 0;
+    padding: 30px;
+    color: #374151;
+  }
+  h1 {
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: #4f46e5;
+    text-align: center;
+  }
+  p {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #6b7280;
+  }
+  /* Input dan Button */
+  #shorten-form {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  #long-url {
+    padding: 12px 15px;
+    font-size: 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 500px;
+    transition: border-color 0.3s;
+  }
+  #long-url:focus {
+    border-color: #4f46e5;
+    outline: none;
+  }
+  button {
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    background-color: #4f46e5;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  button:hover {
+    background-color: #4338ca;
+  }
+  /* Output */
+#output {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 1.1rem;
+  color: #16a34a;
+}
+  
+  /* Dashboard */
+#dashboard {
+  margin-top: 40px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+h2 {
+  color: #4f46e5;
+  font-weight: 700;
+  margin-bottom: 15px;
+  text-align: center;
+}
+#monthly-stats {
+  background: #eef2ff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  margin-bottom: 30px;
+}
+#monthly-stats h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #3730a3;
+  font-weight: 600;
+}
+#link-list {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  min-height: 150px;
+}
+.link-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f3f4f6;
+  padding: 12px 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  transition: background 0.3s;
+}
+.link-item:hover {
+  background: #e5e7eb;
+}
+.link-info {
+  max-width: 70%;
+}
+.link-info a {
+  font-weight: 600;
+  color: #4f46e5;
+  text-decoration: none;
+}
+.link-info a:hover {
+  text-decoration: underline;
+}
+small {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+.link-actions button {
+  background-color: #ef4444;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.link-actions button:hover {
+  background-color: #dc2626;
+}
+
+/* Undo Section */
+#undo-section {
+  display: none;
+  margin-top: 25px;
+}
+#undo-section h4 {
+  margin-bottom: 10px;
+  color: #6b7280;
+  font-weight: 600;
+}
+#undo-list {
+  background: #fff7ed;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #fdba74;
+  max-height: 200px;
+  overflow-y: auto;
+}
+#undo-list label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+#undo-list input[type=checkbox] {
+  margin-right: 10px;
+}
+#undo-restore {
+  margin-top: 12px;
+  padding: 12px 20px;
+  background-color: #4f46e5;
+  color: #fff;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+#undo-restore:hover {
+  background-color: #4338ca;
+}
+
+/* Notification */
+#notification {
+  display: none;
+  margin-top: 20px;
+  padding: 14px 20px;
+  background-color: #d1fae5;
+  color: #065f46;
+  border-radius: 8px;
+  font-weight: 600;
+  text-align: center;
+}
+footer {
+  margin-top: 50px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+</style>
+</head>
+<body>
+
+<h1>seka.id</h1>
+<p>Pemendek tautan cerdas & simple untuk kebutuhan digitalmu</p>
+
+<!-- Form Pendekkan Link -->
+<form id="shorten-form">
+  <input type="url" id="long-url" placeholder="https://contoh.com/link" required />
+  <button type="submit">Pendekkan Sekarang</button>
+</form>
+<div id="output"></div>
+
+<!-- Dashboard -->
+<div id="dashboard">
+  <h2>📊 Dashboard Link</h2>
+  <!-- Statistik Bulanan -->
+  <div id="monthly-stats">
+    <h3>Statistik Bulanan</h3>
+    <div id="monthly-stats-content">Belum ada data.</div>
+  </div>
+
+  <!-- Daftar Link -->
+  <div id="link-list">Belum ada data link.</div>
+
+  <!-- Reset Data -->
+  <button id="reset-button" style="margin-top:20px; background:#ef4444;">Reset Semua Data Link</button>
+
+  <!-- Bagian Undo -->
+  <div id="undo-section">
+    <h4>Pilih tautan yang ingin dikembalikan:</h4>
+    <div id="undo-list"></div>
+    <button id="undo-restore">Kembalikan Tautan Terpilih</button>
+  </div>
+</div>
+
+<!-- Notifikasi -->
+<div id="notification"></div>
+
+<!-- Footer -->
+<footer>
+  © 2025 <strong>seka.id</strong> – Semua hak dilindungi.
+</footer>
+
+<script>
+  const form = document.getElementById('shorten-form');
+  const output = document.getElementById('output');
+  const linkList = document.getElementById('link-list');
+  const resetBtn = document.getElementById('reset-button');
+  const notificationDiv = document.getElementById('notification');
+  
+  const BITLY_TOKEN = '7cd435353e4036038791c7b2956bd0a2cff150fc';
+  
+  let savedLinks = JSON.parse(localStorage.getItem('shortLinks')) || [];
+  let lastDeletedLinks = [];
+  let undoTimeoutId = null;
+  
+  // Fungsi Notifikasi
+  function showNotification(msg) {
+    notificationDiv.innerHTML = msg;
+    notificationDiv.style.display='block';
+    if(undoTimeoutId) clearTimeout(undoTimeoutId);
+    undoTimeoutId=setTimeout(() => {
+      notificationDiv.style.display='none';
+    }, 3000);
+  }
+  
+  // Render Links dan Statistik
+  function renderLinks() {
+    linkList.innerHTML = '';
+    if (savedLinks.length === 0) {
+      linkList.innerHTML = '<p style="text-align:center; color:#999;">Belum ada data link.</p>';
+      updateMonthlyStats();
+      return;
+    }
+  
+    savedLinks.forEach((link, index) => {
+      const div = document.createElement('div');
+      div.className='link-item';
+  
+      const infoDiv = document.createElement('div');
+      infoDiv.className='link-info';
+  
+      const a = document.createElement('a');
+      a.href=link.short;
+      a.target='_blank';
+      a.textContent=link.short.replace('bit.ly','seka.id');
+  
+      a.onclick=()=>{
+        link.clicks= (link.clicks||0)+1;
+        link.lastClicked= new Date().toLocaleString('id-ID');
+        localStorage.setItem('shortLinks', JSON.stringify(savedLinks));
+        updateLinkStats(index, link);
+        updateMonthlyStats();
+      }
+  
+      const small = document.createElement('small');
+      small.innerHTML=`📅 ${link.date}<br>🕒 Terakhir klik: ${link.lastClicked || '-'}<br>👁️ ${link.clicks || 0} klik`;
+      infoDiv.appendChild(a);
+      infoDiv.appendChild(small);
+  
+      const actionsDiv = document.createElement('div');
+      actionsDiv.className='link-actions';
+  
+      const delBtn = document.createElement('button');
+      delBtn.textContent='Hapus';
+      delBtn.onclick=()=>{
+        // Tambahkan ke daftar undo
+        const obj = {
+          link: savedLinks.splice(index,1)[0],
+          timerId: null
+        };
+        // Set timer untuk otomatis hilang setelah 1 menit
+        obj.timerId = setTimeout(() => {
+          // Saat waktu habis, hapus dari undo list
+          console.log('Waktu habis, hapus tautan dari undo list:', obj.link);
+          lastDeletedLinks = lastDeletedLinks.filter(o => o !== obj);
+          showUndoList(); // perbarui tampilan undo
+          // Jika tidak ada lagi, sembunyikan
+          if(lastDeletedLinks.length===0){
+            hideUndo();
+          }
+          // update storage
+          localStorage.setItem('shortLinks', JSON.stringify(savedLinks));
+          updateMonthlyStats();
+        }, 60000); // 1 menit
+  
+        lastDeletedLinks.push(obj);
+        localStorage.setItem('shortLinks', JSON.stringify(savedLinks));
+        renderLinks();
+        showUndoList(); // tampilkan daftar undo
+        showNotification('Data link dihapus. Kamu punya 1 menit untuk undo.');
+      }
+  
+      actionsDiv.appendChild(delBtn);
+      div.appendChild(infoDiv);
+      div.appendChild(actionsDiv);
+      linkList.appendChild(div);
+    });
+    updateMonthlyStats();
+  }
+  
+  // Update statistik link individu
+  function updateLinkStats(index, linkData) {
+    const linkItems = document.querySelectorAll('.link-item');
+    const target = linkItems[index];
+    if(target){
+      const small = target.querySelector('small');
+      if(small){
+        small.innerHTML=`📅 ${linkData.date}<br>🕒 Terakhir klik: ${linkData.lastClicked || '-'}<br>👁️ ${linkData.clicks || 0} klik`;
+      }
+    }
+  }
+  
+  // Render statistik bulanan
+  function renderMonthlySummary() {
+    const container=document.getElementById('monthly-stats-content');
+    const monthMap={};
+    savedLinks.forEach(link=>{
+      const date=new Date(link.date);
+      const monthYear=date.toLocaleString('id-ID',{year:'numeric',month:'long'});
+      monthMap[monthYear]= (monthMap[monthYear]||0)+ (link.clicks||0);
+    });
+    if(Object.keys(monthMap).length===0){
+      container.innerHTML='Belum ada data.';
+      return;
+    }
+    let html='<ul style="list-style:none; padding-left:0;">';
+    for(const [month, clicks] of Object.entries(monthMap)){
+      html+=`<li style="margin-bottom:0.5rem;">📅 <strong>${month}</strong>: ${clicks} klik</li>`;
+    }
+    html+='</ul>';
+    container.innerHTML=html;
+  }
+  
+  // Update statistik bulanan
+  function updateMonthlyStats() {
+    renderMonthlySummary();
+  }
+  
+  // Tampilkan daftar undo
+  function showUndoList() {
+    const undoSection = document.getElementById('undo-section');
+    const undoListDiv = document.getElementById('undo-list');
+    undoListDiv.innerHTML='';
+  
+    if(lastDeletedLinks.length===0){
+      undoSection.style.display='none';
+      document.getElementById('undo-restore').disabled=true;
+      return;
+    }
+  
+    lastDeletedLinks.forEach((obj, index)=>{
+      const link = obj.link;
+      const label=document.createElement('label');
+      const checkbox=document.createElement('input');
+      checkbox.type='checkbox';
+      checkbox.value=index;
+      label.appendChild(checkbox);
+      label.appendChild(document.createTextNode(`${link.long} (${link.short})`));
+      undoListDiv.appendChild(label);
+    });
+  
+    document.getElementById('undo-section').style.display='block';
+  
+    // Aktifkan tombol restore
+    document.getElementById('undo-restore').disabled=false;
+  
+    // Set timeout lagi jika diubah
+    if(undoTimeoutId) clearTimeout(undoTimeoutId);
+    undoTimeoutId=setTimeout(()=>{
+      console.log('Waktu habis, hapus semua dari undo list:', lastDeletedLinks);
+      // Bersihkan semua timer
+      lastDeletedLinks.forEach(obj => {
+        clearTimeout(obj.timerId);
+      });
+      lastDeletedLinks = [];
+      showUndoList(); // update tampilan
+    },60000); // 1 menit
+  }
+  
+  // Fungsi untuk menyembunyikan undo
+  function hideUndo() {
+    document.getElementById('undo-section').style.display='none';
+    if(undoTimeoutId) clearTimeout(undoTimeoutId);
+    undoTimeoutId=null;
+    document.getElementById('undo-restore').disabled=true;
+  }
+  
+  // Handle submit
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const longUrl=document.getElementById('long-url').value.trim();
+    const now=new Date().toLocaleDateString('id-ID',{year:'numeric',month:'long',day:'numeric'});
+    if(!longUrl.startsWith('http')){
+      output.innerHTML=`<p style="color:red;">URL harus diawali dengan http:// atau https://</p>`;
+      return;
+    }
+    try {
+      const res=await fetch('https://api-ssl.bitly.com/v4/shorten',{
+        method:'POST',
+        headers:{
+          'Authorization':'Bearer '+BITLY_TOKEN,
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify({long_url:longUrl,domain:'bit.ly'})
+      });
+      const data=await res.json();
+      if(data.link){
+        const shortUrl=data.link;
+        savedLinks.push({short: shortUrl, long: longUrl, date: now, clicks:0, lastClicked:'-'});
+        localStorage.setItem('shortLinks', JSON.stringify(savedLinks));
+        output.innerHTML=`<p>Tautan pendekmu: <a href="${shortUrl}" target="_blank">${shortUrl.replace('bit.ly','seka.id')}</a></p>`;
+        document.getElementById('long-url').value='';
+        renderLinks();
+      } else {
+        output.innerHTML=`<p style="color:red;">Gagal memendekkan tautan.</p>`;
+      }
+    } catch(err) {
+      output.innerHTML=`<p style="color:red;">Kesalahan: ${err.message}</p>`;
+    }
+  });
+  
+  // Reset semua data link
+  document.getElementById('reset-button').onclick=()=>{
+    if(confirm('Yakin ingin menghapus semua data link?')){
+      // Bersihkan semua timer
+      lastDeletedLinks.forEach(obj => {
+        clearTimeout(obj.timerId);
+      });
+      lastDeletedLinks = [];
+      savedLinks=[];
+      localStorage.removeItem('shortLinks');
+      renderLinks();
+      updateMonthlyStats();
+      showUndoList(); // otomatis hilang setelah 1 menit
+      showNotification('Semua data link dihapus. Klik "Undo" untuk mengembalikan.');
+    }
+  }
+  
+  // Undo restore
+  document.getElementById('undo-restore').onclick=()=>{
+    const checkboxes=document.querySelectorAll('#undo-list input[type=checkbox]');
+    const selectedIndices=[];
+    checkboxes.forEach((cb,i)=>{
+      if(cb.checked) selectedIndices.push(parseInt(cb.value));
+    });
+    // Urutkan dari indeks terbesar agar hapus dari belakang
+    selectedIndices.sort((a,b)=>b-a);
+    // Kembalikan tautan yang dipilih jika belum ada
+    selectedIndices.forEach(i=>{
+      const obj = lastDeletedLinks[i];
+      if(obj){
+        const link = obj.link;
+        const exists = savedLinks.some(l => l.short === link.short);
+        if(!exists){
+          savedLinks.push(link);
+        }
+      }
+    });
+    // Hapus tautan yang dikembalikan dari daftar undo
+    for(let i=selectedIndices.length-1; i>=0; i--) {
+      lastDeletedLinks.splice(selectedIndices[i],1);
+    }
+    // Bersihkan semua timer dari tautan yang dikembalikan
+    lastDeletedLinks.forEach(obj => {
+      clearTimeout(obj.timerId);
+    });
+    lastDeletedLinks = [];
+    localStorage.setItem('shortLinks', JSON.stringify(savedLinks));
+    renderLinks();
+    updateMonthlyStats();
+    hideUndo();
+    showNotification('Tautan yang dipilih telah dikembalikan.');
+  }
+  
+  // Saat halaman dimuat
+  window.addEventListener('DOMContentLoaded', ()=>{
+    renderLinks();
+    updateMonthlyStats();
+    document.getElementById('undo-restore').disabled=true;
+  });
+  </script>
+  
+  </body>
+  </html>
